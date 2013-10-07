@@ -1,6 +1,6 @@
-function! window_adjuster#adjust_window_width()
+function! s:adjust_width(line1, line2)
     let max_col = 0
-    for lnum in range(1, line('$'))
+    for lnum in range(a:line1, a:line2)
         let len = len(getline(lnum))
         if max_col < len
             let max_col = len
@@ -30,4 +30,8 @@ function! window_adjuster#adjust_window_width()
         execute 'vertical resize' max_col
         echo 'width: '.max_col
     endif
+endfunction
+
+function! window_adjuster#adjust_window_width()
+    call s:adjust_width(1, line('$'))
 endfunction
