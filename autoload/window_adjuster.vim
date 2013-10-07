@@ -48,9 +48,11 @@ function! s:adjust_width(line1, line2, right_mergin)
 endfunction
 
 function! s:adjust_width_in(line1, line2, ...)
+    let pos = getpos('.')
     if a:0 >= 2 | execute a:2.'wincmd w' | endif
     call s:adjust_width(a:line1, a:line2, a:0 >= 1 ? a:1 : 0)
     if a:0 >= 2 | wincmd p | endif
+    call setpos('.', pos)
 endfunction
 
 function! window_adjuster#adjust_window_width(...)
