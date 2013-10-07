@@ -68,3 +68,24 @@ endfunction
 function! window_adjuster#adjust_screen_width(...)
     call call('s:adjust_window_width', [line('w0'), line('w$')] + a:000)
 endfunction
+
+function! s:adjust_window_height(height, opts)
+    if len(a:opts) == 1 | execute a:opts[0].'wincmd w' | endif
+    if winheight(0) > a:height
+        execute 'resize' a:height
+        if winheight(0) == a:height
+            echo 'height: '.a:height
+        else
+            echoerr 'can not change window height'
+        endif
+    endif
+    if len(a:opts) == 1 | wincmd p | endif
+endfunction
+
+function! window_adjuster#adjust_window_height(...)
+    call s:adjust_window_height(line('$'), a:000)
+endfunction
+
+function! window_adjuster#adjust_screen_height(...)
+    call s:adjust_window_height(line('w$') - line('w0') + 1, a:000)
+endfunction
