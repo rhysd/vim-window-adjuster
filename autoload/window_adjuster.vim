@@ -35,3 +35,7 @@ endfunction
 function! window_adjuster#adjust_window_width()
     call s:adjust_width(1, line('$'))
 endfunction
+
+function! window_adjuster#adjust_screen_width()
+    call s:adjust_width(line('w0'), line('w$'))
+endfunction
