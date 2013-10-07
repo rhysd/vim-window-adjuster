@@ -8,6 +8,9 @@ function! s:width_of_line_number_region()
 endfunction
 
 function! s:width_of_signs_region()
+    " XXX
+    " Assumed that signs are characters (in terminal)
+    " Is there a way to width of sign which is image?
     redir => this_buffer_sign
         silent execute 'sign place buffer='.bufnr('%')
     redir END
