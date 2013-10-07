@@ -3,17 +3,8 @@ function! s:width_of_line_number_region()
         return 0
     endif
 
-    let l = line('$')
-    if l < 1000
-        return 4
-    else
-        let digit = 1
-        while l > 10
-            let digit += 1
-            let l = l / 10
-        endwhile
-        return digit + 1
-    endif
+    let line = line('$')
+    return line < 1000 ? 4 : (float2nr(log(line) / log(10)) + 1) + 1
 endfunction
 
 function! s:width_of_signs_region()
@@ -34,7 +25,7 @@ function! s:width_of_eol_chars()
     return len(eol_chars) - 4
 endfunction
 
-function! s:max_line_width(line1, line2)
+function! s:max_col_of_current_window(line1, line2)
     let max_col = 0
     for lnum in range(a:line1, a:line2)
         let len = len(getline(lnum))
@@ -42,17 +33,15 @@ function! s:max_line_width(line1, line2)
             let max_col = len
         endif
     endfor
-
-    let max_col += s:width_of_line_number_region()
-    let max_col += s:width_of_signs_region()
-    let max_col += s:width_of_eol_chars()
-
     return max_col
 endfunction
 
 function! s:adjust_width(line1, line2, right_mergin)
 
-    let width = s:max_line_width(a:line1, a:line2) + a:right_mergin
+    let width = s:max_col_of_current_window(a:line1, a:line2) + a:right_mergin
+    let width += s:width_of_line_number_region()
+    let width += s:width_of_signs_region()
+    let width += s:width_of_eol_chars()
 
     if width < winwidth(0)
         execute 'vertical resize' width
