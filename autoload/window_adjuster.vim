@@ -39,8 +39,7 @@ function! s:max_col_of_current_window(line1, line2)
     return max_col
 endfunction
 
-function! s:adjust_width(line1, line2, right_mergin)
-
+function! s:adjust_current_window_width(line1, line2, right_mergin)
     let width = s:max_col_of_current_window(a:line1, a:line2) + a:right_mergin
     let width += s:width_of_line_number_region()
     let width += s:width_of_signs_region()
@@ -56,16 +55,16 @@ function! s:adjust_width(line1, line2, right_mergin)
     endif
 endfunction
 
-function! s:adjust_width_in(line1, line2, ...)
+function! s:adjust_window_width(line1, line2, ...)
     if a:0 >= 2 | execute a:2.'wincmd w' | endif
-    call s:adjust_width(a:line1, a:line2, a:0 >= 1 ? a:1 : 0)
+    call s:adjust_current_window_width(a:line1, a:line2, a:0 >= 1 ? a:1 : 0)
     if a:0 >= 2 | wincmd p | endif
 endfunction
 
 function! window_adjuster#adjust_window_width(...)
-    call call('s:adjust_width_in', [1, line('$')] + a:000)
+    call call('s:adjust_window_width', [1, line('$')] + a:000)
 endfunction
 
 function! window_adjuster#adjust_screen_width(...)
-    call call('s:adjust_width_in', [line('w0'), line('w$')] + a:000)
+    call call('s:adjust_window_width', [line('w0'), line('w$')] + a:000)
 endfunction
