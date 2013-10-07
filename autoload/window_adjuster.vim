@@ -94,3 +94,16 @@ function! window_adjuster#adjust_screen_height(...)
     call s:adjust_window_height(line('w$') - line('w0') + 1, a:000)
 endfunction
 " }}}
+
+" adjust width and height {{{
+" XXX experimental
+function! window_adjuster#adjust_window(...)
+    silent! call call('window_adjuster#adjust_window_width', a:000)
+    silent! call call('window_adjuster#adjust_window_height', a:000[1:])
+endfunction
+
+function! window_adjuster#adjust_screen(...)
+    silent! call call('window_adjuster#adjust_screen_width', a:000)
+    silent! call call('window_adjuster#adjust_screen_height', a:000)
+endfunction
+" }}}
