@@ -4,8 +4,13 @@ Adjust window in Vim
 
 This is a plugin to adjust a window or a screen to its buffer in Vim.
 
-- *command* : `:AdjustWindowWidth`, `:AdjustScreenWidth`
-- *functions* : `window_adjuster#adjust_window_width([{margin}, [{winnr}]])`, `window_adjuster#adjust_screen_width([{margin}, [{winnr}]])`
+- **commands**
+
+`:AdjustWindowWidth`, `:AdjustScreenWidth`
+
+- **functions**
+
+`window_adjuster#adjust_window_width([{margin}, [{winnr}]])`, `window_adjuster#adjust_screen_width([{margin}, [{winnr}]])`
 
 ### License
 
