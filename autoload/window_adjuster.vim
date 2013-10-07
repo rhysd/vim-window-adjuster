@@ -9,13 +9,17 @@ function! s:adjust_width(line1, line2)
 
     " add line number width
     if &number
-        let digit = 1
         let l = line('$')
-        while l > 10
-            let digit += 1
-            let l = l / 10
-        endwhile
-        let max_col += digit + 2
+        if l < 1000
+            let max_col += 4
+        else
+            let digit = 1
+            while l > 10
+                let digit += 1
+                let l = l / 10
+            endwhile
+            let max_col += digit + 1
+        endif
     endif
 
     " add sign width
