@@ -1,3 +1,13 @@
+" utility
+function! s:parse_options(args)
+    let ret = {}
+    for arg in filter(copy(a:args), "v:val =~# '^--\\k\\+=.\\+$'")
+        let [name, value] = matchlist(arg, '^--\(\k\+\)=\(.\+\)$')[1:2]
+        let ret[name] = value
+    endfor
+    return ret
+endfunction
+
 " adjust width of window {{{
 function! s:width_of_line_number_region()
     if ! &number
@@ -40,8 +50,8 @@ function! s:max_col_of_current_window(line1, line2)
     return max_col
 endfunction
 
-function! s:adjust_current_window_width(line1, line2, right_mergin)
-    let width = s:max_col_of_current_window(a:line1, a:line2) + a:right_mergin
+function! s:adjust_current_window_width(line1, line2, right_margin)
+    let width = s:max_col_of_current_window(a:line1, a:line2) + a:right_margin
     let width += s:width_of_line_number_region()
     let width += s:width_of_signs_region()
     let width += s:width_of_eol_chars()
@@ -63,12 +73,24 @@ function! s:adjust_window_width(line1, line2, opts)
     if opts_len >= 2 | wincmd p | endif
 endfunction
 
+" args: margin, winnr
 function! window_adjuster#adjust_window_width(...)
     call s:adjust_window_width(1, line('$'), a:000)
 endfunction
 
+" args: margin, winnr
 function! window_adjuster#adjust_screen_width(...)
     call s:adjust_window_width(line('w0'), line('w$'), a:000)
+endfunction
+
+function! window_adjuster#_cli_adjust_width(type, ...)
+    let opts = s:parse_options(a:000)
+    let args = []
+    call add(args, str2nr(get(opts, 'margin', '0')))
+    if has_key(opts, 'winnr')
+        call add(args, str2nr(opts.winnr))
+    endif
+    call call('window_adjuster#adjust_'.a:type.'_width', args)
 endfunction
 " }}}
 
@@ -97,12 +119,12 @@ endfunction
 
 " adjust width and height {{{
 " XXX experimental
-function! window_adjuster#adjust_window(...)
+function! window_adjuster#adjust_window_both(...)
     silent! call call('window_adjuster#adjust_window_width', a:000)
     silent! call call('window_adjuster#adjust_window_height', a:000[1:])
 endfunction
 
-function! window_adjuster#adjust_screen(...)
+function! window_adjuster#adjust_screen_both(...)
     silent! call call('window_adjuster#adjust_screen_width', a:000)
     silent! call call('window_adjuster#adjust_screen_height', a:000)
 endfunction
