@@ -1,2 +1,3 @@
 - cosider multibyte characters
+- consider foldings
 - add tests
