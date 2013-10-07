@@ -115,6 +115,11 @@ endfunction
 function! window_adjuster#adjust_screen_height(...)
     call s:adjust_window_height(line('w$') - line('w0') + 1, a:000)
 endfunction
+
+function! window_adjuster#_cli_adjust_height(type, ...)
+    let opts = s:parse_options(a:000)
+    call call('window_adjuster#adjust_'.a:type.'_height', has_key(opts, 'winnr') ? [opts.winnr] : [])
+endfunction
 " }}}
 
 " adjust width and height {{{
