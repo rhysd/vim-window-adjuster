@@ -1,3 +1,4 @@
+" adjust width of window {{{
 function! s:width_of_line_number_region()
     if ! &number
         return 0
@@ -68,7 +69,9 @@ endfunction
 function! window_adjuster#adjust_screen_width(...)
     call call('s:adjust_window_width', [line('w0'), line('w$')] + a:000)
 endfunction
+" }}}
 
+" adjust height of window {{{
 function! s:adjust_window_height(height, opts)
     if len(a:opts) == 1 | execute a:opts[0].'wincmd w' | endif
     if winheight(0) > a:height
@@ -89,3 +92,4 @@ endfunction
 function! window_adjuster#adjust_screen_height(...)
     call s:adjust_window_height(line('w$') - line('w0') + 1, a:000)
 endfunction
+" }}}
