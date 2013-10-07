@@ -56,18 +56,19 @@ function! s:adjust_current_window_width(line1, line2, right_mergin)
     endif
 endfunction
 
-function! s:adjust_window_width(line1, line2, ...)
-    if a:0 >= 2 | execute a:2.'wincmd w' | endif
-    call s:adjust_current_window_width(a:line1, a:line2, a:0 >= 1 ? a:1 : 0)
-    if a:0 >= 2 | wincmd p | endif
+function! s:adjust_window_width(line1, line2, opts)
+    let opts_len = len(a:opts)
+    if opts_len >= 2 | execute a:opts[1].'wincmd w' | endif
+    call s:adjust_current_window_width(a:line1, a:line2, opts_len >= 1 ? a:opts[0] : 0)
+    if opts_len >= 2 | wincmd p | endif
 endfunction
 
 function! window_adjuster#adjust_window_width(...)
-    call call('s:adjust_window_width', [1, line('$')] + a:000)
+    call s:adjust_window_width(1, line('$'), a:000)
 endfunction
 
 function! window_adjuster#adjust_screen_width(...)
-    call call('s:adjust_window_width', [line('w0'), line('w$')] + a:000)
+    call s:adjust_window_width(line('w0'), line('w$'), a:000)
 endfunction
 " }}}
 
