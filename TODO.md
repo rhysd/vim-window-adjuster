@@ -1,0 +1,2 @@
+- cosider multibyte characters
+- add tests
