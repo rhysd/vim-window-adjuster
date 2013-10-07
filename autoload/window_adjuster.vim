@@ -1,4 +1,4 @@
-function! s:adjust_width(line1, line2, right_mergin)
+function! s:max_line_width(line1, line2)
     let max_col = 0
     for lnum in range(a:line1, a:line2)
         let len = len(getline(lnum))
@@ -30,12 +30,17 @@ function! s:adjust_width(line1, line2, right_mergin)
         let max_col += 2
     endif
 
-    let max_col += a:right_mergin
+    return max_col
+endfunction
 
-    if max_col < winwidth(0)
-        execute 'vertical resize' max_col
-        if winwidth(0) == max_col
-            echo 'width: '.max_col
+function! s:adjust_width(line1, line2, right_mergin)
+
+    let width = s:max_line_width(a:line1, a:line2) + a:right_mergin
+
+    if width < winwidth(0)
+        execute 'vertical resize' width
+        if winwidth(0) == width
+            echo 'width: '.width
         else
             echoerr 'can not change window width'
         endif
