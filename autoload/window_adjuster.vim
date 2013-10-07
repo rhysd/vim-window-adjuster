@@ -32,10 +32,14 @@ function! s:adjust_width(line1, line2)
     endif
 endfunction
 
-function! window_adjuster#adjust_window_width()
+function! window_adjuster#adjust_window_width(...)
+    if a:0 == 1 | execute a:1.'wincmd w' | endif
     call s:adjust_width(1, line('$'))
+    if a:0 == 1 | wincmd p | endif
 endfunction
 
-function! window_adjuster#adjust_screen_width()
+function! window_adjuster#adjust_screen_width(...)
+    if a:0 == 1 | execute a:1.'wincmd w' | endif
     call s:adjust_width(line('w0'), line('w$'))
+    if a:0 == 1 | wincmd p | endif
 endfunction
