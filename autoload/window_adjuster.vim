@@ -1,4 +1,8 @@
 function! s:width_of_line_number_region()
+    if ! &number
+        return 0
+    endif
+
     let l = line('$')
     if l < 1000
         return 4
@@ -19,6 +23,17 @@ function! s:width_of_signs_region()
     return this_buffer_sign =~# '^\n--- Signs ---\n$' ? 0 : 2
 endfunction
 
+function! s:width_of_eol_chars()
+    if &listchars !~# 'eol:'
+        return 0
+    endif
+
+    let eol_chars = matchstr(split(&listchars, ','), '^eol:')
+
+    " decrease the length for 'eol:'
+    return len(eol_chars) - 4
+endfunction
+
 function! s:max_line_width(line1, line2)
     let max_col = 0
     for lnum in range(a:line1, a:line2)
@@ -28,11 +43,9 @@ function! s:max_line_width(line1, line2)
         endif
     endfor
 
-    if &number
-        let max_col += s:width_of_line_number_region()
-    endif
-
+    let max_col += s:width_of_line_number_region()
     let max_col += s:width_of_signs_region()
+    let max_col += s:width_of_eol_chars()
 
     return max_col
 endfunction
