@@ -3,7 +3,7 @@ function! s:parse_options(args)
     let ret = {}
     for arg in filter(copy(a:args), "v:val =~# '^--\\k\\+=.\\+$'")
         let [name, value] = matchlist(arg, '^--\(\k\+\)=\(.\+\)$')[1:2]
-        let ret[name] = value
+        let ret[name] = value =~# '^\d\+$' ? str2nr(value) : value
     endfor
     return ret
 endfunction
@@ -87,9 +87,9 @@ endfunction
 function! window_adjuster#_cli_adjust_width(type, ...)
     let opts = s:parse_options(a:000)
     let args = []
-    call add(args, str2nr(get(opts, 'margin', 0)))
+    call add(args, get(opts, 'margin', 0))
     if has_key(opts, 'winnr')
-        call add(args, str2nr(opts.winnr))
+        call add(args, opts.winnr)
     endif
     call call('window_adjuster#adjust_'.a:type.'_width', args)
 endfunction
