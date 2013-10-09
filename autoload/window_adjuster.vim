@@ -7,6 +7,31 @@ function! s:parse_options(args)
     endfor
     return ret
 endfunction
+
+function! s:pop(str)
+    return [matchstr(a:str, '^.'), matchstr(a:str, '^.\zs.*$')]
+endfunction
+
+function! s:is_multibyte_char(c)
+    return len(a:c) > 1
+endfunction
+
+function! s:strdisplaywidth(s)
+    if exists('*strdisplaywidth')
+        return strdisplaywidth(a:s)
+    else
+        if strchars(s) == strlen(s)
+            return strlen(s)
+        endif
+        let str = a:s
+        let len = 0
+        while str != ''
+            let [h, str] = s:pop(str)
+            let len += s:is_multibyte_char(h) ? 2 : 1
+        endwhile
+        return len
+    endif
+endfunction
 " }}}
 
 " adjust width of window {{{
@@ -43,7 +68,7 @@ endfunction
 function! s:max_col_of_current_window(line1, line2)
     let max_col = 0
     for lnum in range(a:line1, a:line2)
-        let len = len(getline(lnum))
+        let len = s:strdisplaywidth(getline(lnum))
         if max_col < len
             let max_col = len
         endif
