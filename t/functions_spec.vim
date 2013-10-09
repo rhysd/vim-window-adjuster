@@ -32,4 +32,14 @@ describe 'window_adjuster#adjust_window_width()'
         call window_adjuster#adjust_window_width(0, 2)
         Expect winwidth(2) == 5
     end
+
+    it 'adjusts current window even if multibyte characters are included'
+        Line "びむbeem"
+        call window_adjuster#adjust_window_width()
+        Expect winwidth(0) == 13
+        call window_adjuster#adjust_window_width(0, 2)
+        Expect winwidth(2) == 13
+        call window_adjuster#adjust_window_width(3)
+        Expect winwidth(0) == 16
+    end
 end
