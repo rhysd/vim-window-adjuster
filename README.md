@@ -6,7 +6,7 @@ This is a plugin to adjust a window or a screen to its buffer in Vim.
 
 - **commands**
 
-`:AdjustWindowWidth`, `:AdjustScreenWidth`
+`:AdjustWindowWidth [--winnr=N], [--margin=N] [--direction=(shrink|expand|shrink-or-expand)]`, `:AdjustScreenWidth [--winnr=N], [--margin=N] [--direction=(shrink|expand|shrink-or-expand)]`
 
 - **functions**
 
