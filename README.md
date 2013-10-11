@@ -10,7 +10,7 @@ This is a plugin to adjust a window or a screen to its buffer in Vim.
 
 - **functions**
 
-`window_adjuster#adjust_window_width([{margin}, [{winnr}]])`, `window_adjuster#adjust_screen_width([{margin}, [{winnr}]])`
+`window_adjuster#adjust_window_width([{margin}, [{direction}, [{winnr}]]])`, `window_adjuster#adjust_screen_width([{margin}, [{direction}, [{winnr}]]])`
 
 - **mappings**
 
