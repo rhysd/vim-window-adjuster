@@ -12,6 +12,15 @@ This is a plugin to adjust a window or a screen to its buffer in Vim.
 
 `window_adjuster#adjust_window_width([{margin}, [{winnr}]])`, `window_adjuster#adjust_screen_width([{margin}, [{winnr}]])`
 
+- **mappings**
+
+You can map any favorite key to adjusting width of window.
+For example:
+
+```vim
+nnoremap <C-w>a :<C-u>AdjustScreenWidth --margin=1<CR>
+```
+
 ### License
 
 This plugin is distributed under MIT license.
