@@ -29,7 +29,7 @@ describe 'window_adjuster#adjust_window_width()'
         vertical resize 20
         call window_adjuster#adjust_window_width(3)
         Expect winwidth(0) == 12
-        call window_adjuster#adjust_window_width(0, 2)
+        call window_adjuster#adjust_window_width(0, 'shrink', 2)
         Expect winwidth(2) == 5
     end
 
@@ -37,7 +37,7 @@ describe 'window_adjuster#adjust_window_width()'
         Line "びむbeem"
         call window_adjuster#adjust_window_width()
         Expect winwidth(0) == 13
-        call window_adjuster#adjust_window_width(0, 2)
+        call window_adjuster#adjust_window_width(0, 'expand-or-shrink', 2)
         Expect winwidth(2) == 13
         call window_adjuster#adjust_window_width(3)
         Expect winwidth(0) == 16

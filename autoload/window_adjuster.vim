@@ -76,27 +76,44 @@ function! s:max_col_of_current_window(line1, line2)
     return max_col
 endfunction
 
-function! s:adjust_current_window_width(line1, line2, right_margin)
+function! s:resize_window(width)
+    execute 'vertical resize' a:width
+    if winwidth(0) == a:width
+        echo 'width: '.a:width
+    else
+        echoerr 'can not change window width'
+    endif
+endfunction
+
+function! s:should_resize_window(width, direction)
+    if a:direction == 'expand-or-shrink'
+        return a:width != winwidth(0)
+    elseif a:direction == 'expand'
+        return a:width > winwidth(0)
+    elseif a:direction == 'shrink'
+        return a:width < winwidth(0)
+    else
+        echoerr 'invalid direction: '.a:direction
+        return 0
+    endif
+endfunction
+
+function! s:adjust_current_window_width(line1, line2, right_margin, direction)
     let width = s:max_col_of_current_window(a:line1, a:line2) + a:right_margin
     let width += s:width_of_line_number_region()
     let width += s:width_of_signs_region()
     let width += s:width_of_eol_chars()
 
-    if width < winwidth(0)
-        execute 'vertical resize' width
-        if winwidth(0) == width
-            echo 'width: '.width
-        else
-            echoerr 'can not change window width'
-        endif
+    if s:should_resize_window(width, a:direction)
+        call s:resize_window(width)
     endif
 endfunction
 
 function! s:adjust_window_width(line1, line2, opts)
     let opts_len = len(a:opts)
-    if opts_len >= 2 | execute a:opts[1].'wincmd w' | endif
-    call s:adjust_current_window_width(a:line1, a:line2, opts_len >= 1 ? a:opts[0] : 0)
-    if opts_len >= 2 | wincmd p | endif
+    if opts_len >= 3 | execute a:opts[2].'wincmd w' | endif
+    call s:adjust_current_window_width(a:line1, a:line2, opts_len >= 1 ? a:opts[0] : 0, opts_len >= 2 ? a:opts[1] : 'expand-or-shrink')
+    if opts_len >= 3 | wincmd p | endif
 endfunction
 
 " args: margin, winnr
@@ -113,6 +130,7 @@ function! window_adjuster#_cli_adjust_width(type, ...)
     let opts = s:parse_options(a:000)
     let args = []
     call add(args, get(opts, 'margin', 0))
+    call add(args, get(opts, 'direction', 'expand-or-shrink'))
     if has_key(opts, 'winnr')
         call add(args, opts.winnr)
     endif
